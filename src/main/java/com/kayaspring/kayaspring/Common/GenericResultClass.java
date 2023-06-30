@@ -5,6 +5,10 @@ public class GenericResultClass {
     private String message;
     private boolean isSuccess;
 
+    private GenericResultClass() {
+
+    }
+
     public Object getData() {
         return data;
     }

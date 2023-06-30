@@ -1,7 +1,13 @@
 package com.kayaspring.kayaspring.Models;
 
-public class User extends BaseClass {
-    public int id;
+import jakarta.persistence.*;
+
+
+@Entity
+@Table
+
+public class AppUser extends BaseClass {
+
     public String username;
     public String password;
     public String email;

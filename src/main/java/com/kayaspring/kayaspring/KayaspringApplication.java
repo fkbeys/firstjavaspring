@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("com.kayaspring")
+
 public class KayaspringApplication {
 
     public static void main(String[] args) {
