@@ -1,6 +1,6 @@
-package com.kayaspring.Common;
+package com.kayaspring.kayaspring.Common;
 
-public  class GenericResultClass {
+public class GenericResultClass {
     private Object _data;
     private String _message;
     private boolean _isSuccess;

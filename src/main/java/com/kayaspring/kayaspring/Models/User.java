@@ -1,6 +1,6 @@
-package com.kayaspring.Models;
+package com.kayaspring.kayaspring.Models;
 
-public class User extends BaseClass{
+public class User extends BaseClass {
     public int id;
     public String username;
     public String password;

@@ -1,4 +1,4 @@
-package com.kayaspring.Common;
+package com.kayaspring.kayaspring.Common;
 
 public class GenericRequestDataClass {
     public int page;
