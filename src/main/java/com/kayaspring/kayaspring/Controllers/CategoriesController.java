@@ -1,43 +1,41 @@
 package com.kayaspring.kayaspring.Controllers;
 
 import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Data.IUnitOfWork;
-import com.kayaspring.kayaspring.Data.UnitOfWork;
+import com.kayaspring.kayaspring.Data.Repos.ICategoriesRepository;
+import com.kayaspring.kayaspring.Models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("Api/Categories")
 public class CategoriesController {
 
-    private final UnitOfWork uof;
+    private final ICategoriesRepository categoriesRepository;
 
     @Autowired
-    public CategoriesController(IUnitOfWork uof) {
-        this.uof = (UnitOfWork) uof;
+    public CategoriesController(ICategoriesRepository categoriesRepository1) {
+        this.categoriesRepository = categoriesRepository1;
     }
 
     @GetMapping
-    public int GetCategories() {
+    public GenericResultClass GetCategories() {
 
-       try {
-           var ddd=uof.categoriesRepository.findAll();
-       }
-       catch (Exception e){
-           System.out.println(e.getMessage());
-       }
-
-
-        return 11;
+        try {
+            var data = categoriesRepository.findAll();
+            return GenericResultClass.Success(data);
+        } catch (Exception e) {
+            return GenericResultClass.Error(e);
+        }
     }
 
     @PostMapping
-    public GenericResultClass PostCategories() {
+    public void PostCategories(@RequestBody Category category) {
+        categoriesRepository.save(category);
+    }
 
-        return GenericResultClass.Success(111);
+    @DeleteMapping("/{id}")
+    public void DeleteCategories(@PathVariable long id) {
+        categoriesRepository.deleteById(id);
     }
 
 

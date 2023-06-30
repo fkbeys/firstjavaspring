@@ -1,26 +1,26 @@
 package com.kayaspring.kayaspring.Common;
 
 public class GenericResultClass {
-    private Object _data;
-    private String _message;
-    private boolean _isSuccess;
+    private Object data;
+    private String message;
+    private boolean isSuccess;
 
-    public Object get_data() {
-        return _data;
+    public Object getData() {
+        return data;
     }
 
-    public String get_message() {
-        return _message;
+    public String getMessage() {
+        return message;
     }
 
-    public boolean is_isSuccess() {
-        return _isSuccess;
+    public boolean isSuccess() {
+        return isSuccess;
     }
 
     private GenericResultClass(Object data, String xmessage, boolean isSuccess) {
-        _data = data;
-        _message = xmessage;
-        _isSuccess = isSuccess;
+        this.data = data;
+        message = xmessage;
+        this.isSuccess = isSuccess;
     }
 
     public static GenericResultClass Success(Object Data) {

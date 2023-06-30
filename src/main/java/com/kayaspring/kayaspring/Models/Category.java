@@ -16,4 +16,8 @@ public class Category extends BaseClass {
     //each category may have a sub or header category...
     public int headerId;
     public int subId;
+
+    
+    @Transient
+    public int somethingUnNecessary;
 }
