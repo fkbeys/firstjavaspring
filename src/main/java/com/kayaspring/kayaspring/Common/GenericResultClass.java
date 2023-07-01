@@ -1,6 +1,7 @@
 package com.kayaspring.kayaspring.Common;
 
 import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
+import jakarta.persistence.Transient;
 
 public class GenericResultClass {
     private long totalItemCount;
@@ -8,6 +9,8 @@ public class GenericResultClass {
     private String message;
     private boolean isSuccess;
 
+
+    @Transient
     private static ILogger logger;
 
 
@@ -23,8 +26,7 @@ public class GenericResultClass {
         return isSuccess;
     }
 
-
-    private GenericResultClass(Object _data, long _totalItemCount, String _message, boolean _isSuccess) {
+    public GenericResultClass(Object _data, long _totalItemCount, String _message, boolean _isSuccess) {
         this.data = _data;
         this.message = _message;
         this.totalItemCount = _totalItemCount;
@@ -35,6 +37,7 @@ public class GenericResultClass {
 
         return new GenericResultClass(Data, _totalItemCount, "Ok", true);
     }
+
 
 
     public static GenericResultClass Error(Exception ex, ILogger logger) {
@@ -49,7 +52,9 @@ public class GenericResultClass {
             errorMessage = ex.getMessage();
         }
 
-        logger.log("Error", errorMessage);
+        if (logger != null) {
+            logger.log("Error", errorMessage);
+        }
         return new GenericResultClass(null, 0, errorMessage, false);
     }
 

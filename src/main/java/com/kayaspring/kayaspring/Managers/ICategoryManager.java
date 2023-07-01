@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Data;
+package com.kayaspring.kayaspring.Managers;
 
 import com.kayaspring.kayaspring.Models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
