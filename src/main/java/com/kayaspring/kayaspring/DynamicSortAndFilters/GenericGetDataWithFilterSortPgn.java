@@ -7,6 +7,7 @@ import com.kayaspring.kayaspring.Common.GenericResultClass;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -15,7 +16,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenericFilterAndSorting<T> implements IGenericFilterAndSorting {
+
+@Repository
+public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn
+{
 
     @Override
     public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {
