@@ -14,22 +14,4 @@ public class GenericRequestDataClass {
     public String columnFilters;
     public String columnSorts;
 
-    public List<ColumnFilterModel> getColumnFilterList() {
-        return jsonStringToList(columnFilters, new TypeReference<List<ColumnFilterModel>>() {
-        });
-    }
-
-    public List<ColumnSortModel> getColumnSortList() {
-        return jsonStringToList(columnSorts, new TypeReference<List<ColumnSortModel>>() {
-        });
-    }
-
-    private <T> List<T> jsonStringToList(String jsonString, TypeReference<List<T>> typeReference) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(jsonString, typeReference);
-        } catch (IOException e) {
-            throw new RuntimeException("JSON stringi parse error.", e);
-        }
-    }
 }

@@ -1,23 +1,26 @@
 package com.kayaspring.kayaspring.DynamicSortAndFilters;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class GenericFilterAndSorting<T> {
+public class GenericFilterAndSorting<T> implements IGenericFilterAndSorting {
 
-    public <T> GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
-
-        List<ColumnFilterModel> filters = request.getColumnFilterList();
-        List<ColumnSortModel> sortModels = request.getColumnSortList();
+    @Override
+    public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {
+        List<ColumnFilterModel> filters = getColumnFilterList(request.columnFilters);
+        List<ColumnSortModel> sortModels = getColumnSortList(request.columnSorts);
         int page = request.page;
         int size = request.size;
 
@@ -28,7 +31,13 @@ public final class GenericFilterAndSorting<T> {
         List<Predicate> predicates = BuildThePredictionList(filters, cb, root);
         List<Order> orders = BuildTheSortingList(sortModels, cb, root);
 
-        query.select(root).where(predicates.toArray(new Predicate[0])).orderBy(orders);
+        query.select(root);
+        if (predicates.size() > 0) {
+            query.where(predicates.toArray(new Predicate[0]));
+        }
+        if (orders.size() > 0) {
+            query.orderBy(orders);
+        }
 
         TypedQuery<T> typedQuery = entityManager.createQuery(query);
 
@@ -41,8 +50,34 @@ public final class GenericFilterAndSorting<T> {
         return GenericResultClass.Success(data, count);
     }
 
+    private List<ColumnFilterModel> getColumnFilterList(String columnFilters) {
+        try {
+            return jsonStringToList(columnFilters, new TypeReference<List<ColumnFilterModel>>() {
+            });
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-    public Long CountThePredictedData(TypedQuery typedQuery) {
+    private List<ColumnSortModel> getColumnSortList(String columnSorts) {
+        try {
+            return jsonStringToList(columnSorts, new TypeReference<List<ColumnSortModel>>() {
+            });
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private <T> List<T> jsonStringToList(String jsonString, TypeReference<List<T>> typeReference) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(jsonString, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException("JSON stringi parse error.", e);
+        }
+    }
+
+    private Long CountThePredictedData(TypedQuery typedQuery) {
         Long count = typedQuery.getResultStream().count();
 
 //        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -52,8 +87,10 @@ public final class GenericFilterAndSorting<T> {
         return count;
     }
 
-    public <T> List<Order> BuildTheSortingList(List<ColumnSortModel> sortModels, CriteriaBuilder cb, Root<T> root) {
+    private <T> List<Order> BuildTheSortingList(List<ColumnSortModel> sortModels, CriteriaBuilder cb, Root<T> root) {
         List<Order> orders = new ArrayList<>();
+        if (sortModels == null) return orders;
+
         for (ColumnSortModel sortModel : sortModels) {
             Path<Object> field = root.get(sortModel.id);
             if (sortModel.desc) {
@@ -65,9 +102,11 @@ public final class GenericFilterAndSorting<T> {
         return orders;
     }
 
-    public <T> List<Predicate> BuildThePredictionList(List<ColumnFilterModel> filters, CriteriaBuilder cb, Root<T> root) {
+    private <T> List<Predicate> BuildThePredictionList(List<ColumnFilterModel> filters, CriteriaBuilder cb, Root<T> root) {
 
         List<Predicate> predicates = new ArrayList<>();
+
+        if (filters == null) return predicates;
 
         for (ColumnFilterModel filter : filters) {
             Path<Object> field = root.get(filter.id);
@@ -113,8 +152,7 @@ public final class GenericFilterAndSorting<T> {
         return predicates;
     }
 
-
-    public TypedQuery ApplyThePagination(TypedQuery typedQuery, int page, int size) {
+    private TypedQuery ApplyThePagination(TypedQuery typedQuery, int page, int size) {
         typedQuery.setFirstResult(page * size);
         typedQuery.setMaxResults(size);
         return typedQuery;

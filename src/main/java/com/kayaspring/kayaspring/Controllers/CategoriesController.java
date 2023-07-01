@@ -4,16 +4,16 @@ import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.ICategoriesRepository;
 import com.kayaspring.kayaspring.DynamicSortAndFilters.GenericFilterAndSorting;
+import com.kayaspring.kayaspring.DynamicSortAndFilters.IGenericFilterAndSorting;
 import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Models.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Transactional
 @RequestMapping("Api/Categories")
 public class CategoriesController {
 
@@ -30,13 +30,15 @@ public class CategoriesController {
     @PostMapping("GetCategories")
     public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
         try {
-            var dataGetAndFilter = new GenericFilterAndSorting();
+            IGenericFilterAndSorting dataGetAndFilter = new GenericFilterAndSorting();
             var result = dataGetAndFilter.Apply(entityManager, requestData, Category.class);
             return result;
         } catch (Exception e) {
             return GenericResultClass.Error(e, logger);
         }
     }
+
+
 
 
 }
