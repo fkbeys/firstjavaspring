@@ -34,10 +34,7 @@ public class CategoriesController {
             var filterList = requestData.getColumnFilterList();
             var sortList = requestData.getColumnSortList();
 
-          //  List<Category> results = service.findAll(ColumnFilterModelSpecification.withDynamicQuery(filterList));
-
-            var results=ColumnFilterModelSpecification.filterCategories(entityManager,filterList);
-
+            var results = ColumnFilterModelSpecification.filterEntities(entityManager, filterList, Category.class);
 
             return GenericResultClass.Success(results);
         } catch (Exception e) {
