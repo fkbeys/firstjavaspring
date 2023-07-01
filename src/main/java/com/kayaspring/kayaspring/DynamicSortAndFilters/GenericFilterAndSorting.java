@@ -12,9 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenericFilterAndSorting<T> {
+public final class GenericFilterAndSorting<T> {
 
-    public static <T> GenericResultClass apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
+    public <T> GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
 
         List<ColumnFilterModel> filters = request.getColumnFilterList();
         List<ColumnSortModel> sortModels = request.getColumnSortList();
@@ -25,6 +25,48 @@ public class GenericFilterAndSorting<T> {
         CriteriaQuery<T> query = cb.createQuery(tClass);
         Root<T> root = query.from(tClass);
 
+        List<Predicate> predicates = BuildThePredictionList(filters, cb, root);
+        List<Order> orders = BuildTheSortingList(sortModels, cb, root);
+
+        query.select(root).where(predicates.toArray(new Predicate[0])).orderBy(orders);
+
+        TypedQuery<T> typedQuery = entityManager.createQuery(query);
+
+        //TODO: Performance issue with this method. Needs to be changed as soon as possible.
+        Long count = CountThePredictedData(typedQuery);
+
+        typedQuery = ApplyThePagination(typedQuery, page, size);
+
+        var data = typedQuery.getResultList();
+        return GenericResultClass.Success(data, count);
+    }
+
+
+    public Long CountThePredictedData(TypedQuery typedQuery) {
+        Long count = typedQuery.getResultStream().count();
+
+//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+//        Root<T> countRoot = countQuery.from(tClass);
+//        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
+//        count = entityManager.createQuery(countQuery).getSingleResult();
+        return count;
+    }
+
+    public <T> List<Order> BuildTheSortingList(List<ColumnSortModel> sortModels, CriteriaBuilder cb, Root<T> root) {
+        List<Order> orders = new ArrayList<>();
+        for (ColumnSortModel sortModel : sortModels) {
+            Path<Object> field = root.get(sortModel.id);
+            if (sortModel.desc) {
+                orders.add(cb.desc(field));
+            } else {
+                orders.add(cb.asc(field));
+            }
+        }
+        return orders;
+    }
+
+    public <T> List<Predicate> BuildThePredictionList(List<ColumnFilterModel> filters, CriteriaBuilder cb, Root<T> root) {
+
         List<Predicate> predicates = new ArrayList<>();
 
         for (ColumnFilterModel filter : filters) {
@@ -34,9 +76,8 @@ public class GenericFilterAndSorting<T> {
             if (fieldType.equals(String.class)) {
                 predicates.add(cb.like(cb.lower(field.as(String.class)), "%" + filter.value.toString().toLowerCase() + "%"));
             } else if (fieldType.equals(Integer.class) || fieldType.equals(Double.class)) {
-                // Parse the string to get the list of values
+
                 String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
-                // Convert the strings to double
 
                 Double minValue;
                 Double maxValue;
@@ -54,8 +95,6 @@ public class GenericFilterAndSorting<T> {
             } else if (fieldType.equals(LocalDateTime.class)) {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-                // Parse the string to get the list of dates
                 String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
 
                 LocalDate startDate;
@@ -68,44 +107,18 @@ public class GenericFilterAndSorting<T> {
                     startDate = LocalDate.MIN;
                     endDate = LocalDate.parse(values[0], formatter);
                 }
-
                 predicates.add(cb.between(root.get(filter.id).as(LocalDate.class), startDate, endDate));
-
             }
         }
-
-        List<Order> orders = new ArrayList<>();
-        for (ColumnSortModel sortModel : sortModels) {
-            Path<Object> field = root.get(sortModel.id);
-            if (sortModel.desc) {
-                orders.add(cb.desc(field));
-            } else {
-                orders.add(cb.asc(field));
-            }
-        }
-
-        query.select(root)
-                .where(predicates.toArray(new Predicate[0]))
-                .orderBy(orders);
-
-        TypedQuery<T> typedQuery = entityManager.createQuery(query);
+        return predicates;
+    }
 
 
-        ///TODO: There s an arror with the hibernate. it doesnt work. but in the future, we need to take care of this code...
-        //that s why, right now, i use the count method.
-        Long count = 0L;
-        count = typedQuery.getResultStream().count();
-//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-//        Root<T> countRoot = countQuery.from(tClass);
-//        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
-//        count = entityManager.createQuery(countQuery).getSingleResult();
-
-
+    public TypedQuery ApplyThePagination(TypedQuery typedQuery, int page, int size) {
         typedQuery.setFirstResult(page * size);
         typedQuery.setMaxResults(size);
-
-        var data = typedQuery.getResultList();
-        return GenericResultClass.Success(data, count);
+        return typedQuery;
     }
+
 
 }

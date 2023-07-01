@@ -1,4 +1,5 @@
 package com.kayaspring.kayaspring.Controllers;
+
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.ICategoriesRepository;
@@ -29,12 +30,13 @@ public class CategoriesController {
     @PostMapping("GetCategories")
     public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
         try {
-            return  GenericFilterAndSorting.apply(entityManager, requestData, Category.class);
+            var dataGetAndFilter = new GenericFilterAndSorting();
+            var result = dataGetAndFilter.Apply(entityManager, requestData, Category.class);
+            return result;
         } catch (Exception e) {
             return GenericResultClass.Error(e, logger);
         }
     }
-
 
 
 }
