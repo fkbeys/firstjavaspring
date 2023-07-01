@@ -1,7 +1,9 @@
 package com.kayaspring.kayaspring.DynamicSortAndFilters;
 
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
+import com.kayaspring.kayaspring.Common.GenericResultClass;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 
 import java.time.LocalDate;
@@ -12,10 +14,12 @@ import java.util.List;
 
 public class GenericFilterAndSorting<T> {
 
-    public static <T> List<T> apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
+    public static <T> GenericResultClass apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
 
         List<ColumnFilterModel> filters = request.getColumnFilterList();
         List<ColumnSortModel> sortModels = request.getColumnSortList();
+        int page = request.page;
+        int size = request.size;
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(tClass);
@@ -84,7 +88,24 @@ public class GenericFilterAndSorting<T> {
                 .where(predicates.toArray(new Predicate[0]))
                 .orderBy(orders);
 
-        return entityManager.createQuery(query).getResultList();
+        TypedQuery<T> typedQuery = entityManager.createQuery(query);
+
+
+        ///TODO: There s an arror with the hibernate. it doesnt work. but in the future, we need to take care of this code...
+        //that s why, right now, i use the count method.
+        Long count = 0L;
+        count = typedQuery.getResultStream().count();
+//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+//        Root<T> countRoot = countQuery.from(tClass);
+//        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
+//        count = entityManager.createQuery(countQuery).getSingleResult();
+
+
+        typedQuery.setFirstResult(page * size);
+        typedQuery.setMaxResults(size);
+
+        var data = typedQuery.getResultList();
+        return GenericResultClass.Success(data, count);
     }
 
 }

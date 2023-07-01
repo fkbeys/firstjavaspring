@@ -1,5 +1,4 @@
 package com.kayaspring.kayaspring.Controllers;
-
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.ICategoriesRepository;
@@ -8,7 +7,10 @@ import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Models.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("Api/Categories")
@@ -24,20 +26,15 @@ public class CategoriesController {
         this.logger = logger;
     }
 
-    @GetMapping("test")
-    public void test() throws Exception {
-        throw new Exception("Error test");
-    }
-
-    @PostMapping("Get")
+    @PostMapping("GetCategories")
     public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
         try {
-            var results = GenericFilterAndSorting.apply(entityManager, requestData, Category.class);
-            return GenericResultClass.Success(results);
+            return  GenericFilterAndSorting.apply(entityManager, requestData, Category.class);
         } catch (Exception e) {
-            return GenericResultClass.Error(e,logger);
+            return GenericResultClass.Error(e, logger);
         }
     }
+
 
 
 }

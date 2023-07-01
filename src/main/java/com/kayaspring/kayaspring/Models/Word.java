@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table
+@Table(name="Word")
 public class Word extends BaseClass {
 
     public int languageId;

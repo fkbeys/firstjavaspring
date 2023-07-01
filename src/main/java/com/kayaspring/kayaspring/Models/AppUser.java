@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table
+@Table(name="AppUser")
 
 public class AppUser extends BaseClass {
 
