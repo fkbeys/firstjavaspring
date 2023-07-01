@@ -1,5 +1,6 @@
 package com.kayaspring.kayaspring.DynamicSortAndFilters;
 
+import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 
@@ -11,7 +12,11 @@ import java.util.List;
 
 public class ColumnFilterModelSpecification<T> {
 
-    public static <T> List<T> filterEntities(EntityManager entityManager, List<ColumnFilterModel> filters, Class<T> tClass) {
+    public static <T> List<T> filterAndSortEntities(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
+
+        List<ColumnFilterModel> filters=request.getColumnFilterList();
+        List<ColumnSortModel> sortModels=request.getColumnSortList();
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(tClass);
         Root<T> root = query.from(tClass);
@@ -65,12 +70,21 @@ public class ColumnFilterModelSpecification<T> {
             }
         }
 
+        List<Order> orders = new ArrayList<>();
+        for (ColumnSortModel sortModel : sortModels) {
+            Path<Object> field = root.get(sortModel.id);
+            if (sortModel.desc) {
+                orders.add(cb.desc(field));
+            } else {
+                orders.add(cb.asc(field));
+            }
+        }
 
-        query.select(root).where(predicates.toArray(new Predicate[0]));
+        query.select(root)
+                .where(predicates.toArray(new Predicate[0]))
+                .orderBy(orders);
 
         return entityManager.createQuery(query).getResultList();
     }
-
-
 
 }

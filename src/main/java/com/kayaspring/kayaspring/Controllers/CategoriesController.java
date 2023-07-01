@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("Api/Categories")
 public class CategoriesController {
@@ -31,10 +29,8 @@ public class CategoriesController {
     public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
 
         try {
-            var filterList = requestData.getColumnFilterList();
-            var sortList = requestData.getColumnSortList();
 
-            var results = ColumnFilterModelSpecification.filterEntities(entityManager, filterList, Category.class);
+            var results = ColumnFilterModelSpecification.filterAndSortEntities(entityManager, requestData, Category.class);
 
             return GenericResultClass.Success(results);
         } catch (Exception e) {
