@@ -1,13 +1,14 @@
 package com.kayaspring.kayaspring.Common;
 
+import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
+
 public class GenericResultClass {
     private Object data;
     private String message;
     private boolean isSuccess;
 
-    private GenericResultClass() {
+    private static ILogger logger;
 
-    }
 
     public Object getData() {
         return data;
@@ -21,6 +22,7 @@ public class GenericResultClass {
         return isSuccess;
     }
 
+
     private GenericResultClass(Object data, String xmessage, boolean isSuccess) {
         this.data = data;
         message = xmessage;
@@ -32,9 +34,20 @@ public class GenericResultClass {
         return new GenericResultClass(Data, "Ok", true);
     }
 
-    public static GenericResultClass Error(Exception e) {
 
-        String errorMessage = "Error:" + e.getMessage();
+    public static GenericResultClass Error(Exception ex, ILogger logger) {
+
+        StackTraceElement[] stackTrace = ex.getStackTrace();
+        String errorMessage = "";
+        if (stackTrace.length > 0) {
+            int lineNumber = stackTrace[0].getLineNumber();
+            String className = stackTrace[0].getFileName();
+            errorMessage = "Class: " + className + " at line : " + lineNumber+"  "+ex.getMessage();
+        } else {
+            errorMessage = ex.getMessage();
+        }
+
+        logger.log("Error", errorMessage);
         return new GenericResultClass(null, errorMessage, false);
     }
 

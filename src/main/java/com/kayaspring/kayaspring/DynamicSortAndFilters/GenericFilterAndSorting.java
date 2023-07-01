@@ -10,12 +10,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColumnFilterModelSpecification<T> {
+public class GenericFilterAndSorting<T> {
 
-    public static <T> List<T> filterAndSortEntities(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
+    public static <T> List<T> apply(EntityManager entityManager, GenericRequestDataClass request, Class<T> tClass) {
 
-        List<ColumnFilterModel> filters=request.getColumnFilterList();
-        List<ColumnSortModel> sortModels=request.getColumnSortList();
+        List<ColumnFilterModel> filters = request.getColumnFilterList();
+        List<ColumnSortModel> sortModels = request.getColumnSortList();
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(tClass);

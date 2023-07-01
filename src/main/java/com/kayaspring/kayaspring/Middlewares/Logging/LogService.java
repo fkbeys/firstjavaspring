@@ -1,11 +1,11 @@
-package com.kayaspring.kayaspring.Middlewares;
+package com.kayaspring.kayaspring.Middlewares.Logging;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LogService {
+public class LogService implements ILogger {
 
     private final JdbcTemplate jdbcTemplate;
 
