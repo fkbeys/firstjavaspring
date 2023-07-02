@@ -24,6 +24,8 @@ public class GenericResultClass {
         return new GenericResultClass(Data, _totalItemCount, "Ok", true);
     }
 
+
+
     public static GenericResultClass Error(Exception ex, ILogger logger) {
 
         StackTraceElement[] stackTrace = ex.getStackTrace();

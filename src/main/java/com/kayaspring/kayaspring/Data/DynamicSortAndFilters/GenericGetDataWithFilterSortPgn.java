@@ -82,11 +82,6 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
 
     private Long CountThePredictedData(TypedQuery typedQuery) {
         Long count = typedQuery.getResultStream().count();
-
-//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-//        Root<T> countRoot = countQuery.from(tClass);
-//        countQuery.select(cb.count(countRoot)).where(predicates.toArray(new Predicate[0]));
-//        count = entityManager.createQuery(countQuery).getSingleResult();
         return count;
     }
 
@@ -106,9 +101,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
     }
 
     private <T> List<Predicate> BuildThePredictionList(List<ColumnFilterModel> filters, CriteriaBuilder cb, Root<T> root) {
-
         List<Predicate> predicates = new ArrayList<>();
-
         if (filters == null) return predicates;
 
         for (ColumnFilterModel filter : filters) {
@@ -116,43 +109,53 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
             Class<?> fieldType = field.getJavaType();
 
             if (fieldType.equals(String.class)) {
-                predicates.add(cb.like(cb.lower(field.as(String.class)), "%" + filter.value.toString().toLowerCase() + "%"));
+                predicates.add(buildStringPredicate(cb, field, filter));
             } else if (fieldType.equals(Integer.class) || fieldType.equals(Double.class)) {
-
-                String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
-
-                Double minValue;
-                Double maxValue;
-                if (values.length > 1) {
-                    minValue = Double.parseDouble(values[0]);
-                    maxValue = Double.parseDouble(values[1]);
-                } else {
-                    minValue = 0.0;
-                    maxValue = Double.parseDouble(values[0]);
-                }
-
-                predicates.add(cb.between(root.get(filter.id).as(Double.class), minValue, maxValue));
+                predicates.add(buildNumericPredicate(cb, root, filter));
             } else if (fieldType.equals(Boolean.class)) {
-                predicates.add(cb.equal(root.get(filter.id), Boolean.parseBoolean(filter.value.toString())));
+                predicates.add(buildBooleanPredicate(cb, root, filter));
             } else if (fieldType.equals(LocalDateTime.class)) {
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
-
-                LocalDate startDate;
-                LocalDate endDate;
-
-                if (values.length > 1) {
-                    startDate = LocalDate.parse(values[0], formatter);
-                    endDate = LocalDate.parse(values[1], formatter);
-                } else {
-                    startDate = LocalDate.MIN;
-                    endDate = LocalDate.parse(values[0], formatter);
-                }
-                predicates.add(cb.between(root.get(filter.id).as(LocalDate.class), startDate, endDate));
+                predicates.add(buildDateTimePredicate(cb, root, filter));
             }
         }
         return predicates;
+    }
+
+    private <T> Predicate buildStringPredicate(CriteriaBuilder cb, Path<Object> field, ColumnFilterModel filter) {
+        return cb.like(cb.lower(field.as(String.class)), "%" + filter.value.toString().toLowerCase() + "%");
+    }
+
+    private <T> Predicate buildNumericPredicate(CriteriaBuilder cb, Root<T> root, ColumnFilterModel filter) {
+        String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
+        Double minValue;
+        Double maxValue;
+        if (values.length > 1) {
+            minValue = Double.parseDouble(values[0]);
+            maxValue = Double.parseDouble(values[1]);
+        } else {
+            minValue = 0.0;
+            maxValue = Double.parseDouble(values[0]);
+        }
+        return cb.between(root.get(filter.id).as(Double.class), minValue, maxValue);
+    }
+
+    private <T> Predicate buildBooleanPredicate(CriteriaBuilder cb, Root<T> root, ColumnFilterModel filter) {
+        return cb.equal(root.get(filter.id), Boolean.parseBoolean(filter.value.toString()));
+    }
+
+    private <T> Predicate buildDateTimePredicate(CriteriaBuilder cb, Root<T> root, ColumnFilterModel filter) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
+        LocalDate startDate;
+        LocalDate endDate;
+        if (values.length > 1) {
+            startDate = LocalDate.parse(values[0], formatter);
+            endDate = LocalDate.parse(values[1], formatter);
+        } else {
+            startDate = LocalDate.MIN;
+            endDate = LocalDate.parse(values[0], formatter);
+        }
+        return cb.between(root.get(filter.id).as(LocalDate.class), startDate, endDate);
     }
 
     private TypedQuery ApplyThePagination(TypedQuery typedQuery, int page, int size) {
@@ -160,6 +163,4 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         typedQuery.setMaxResults(size);
         return typedQuery;
     }
-
-
 }
