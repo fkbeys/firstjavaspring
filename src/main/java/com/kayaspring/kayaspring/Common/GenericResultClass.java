@@ -24,9 +24,13 @@ public class GenericResultClass {
         return new GenericResultClass(Data, _totalItemCount, "Ok", true);
     }
 
+    public static GenericResultClass UnSuccessful(String message) {
+
+        return new GenericResultClass("", 0, message, false);
+    }
 
 
-    public static GenericResultClass Error(Exception ex, ILogger logger) {
+    public static GenericResultClass Exception(Exception ex, ILogger logger) {
 
         StackTraceElement[] stackTrace = ex.getStackTrace();
         String errorMessage = "";
@@ -43,6 +47,7 @@ public class GenericResultClass {
         }
         return new GenericResultClass(null, 0, errorMessage, false);
     }
+
 
     public Object getData() {
         return data;

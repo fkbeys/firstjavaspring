@@ -1,10 +1,10 @@
 package com.kayaspring.kayaspring.Api.Controllers;
 
+import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.Business.Managers.ICategoryManager;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.DynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;
-import com.kayaspring.kayaspring.Business.Managers.ICategoryManager;
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Entities.Models.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -34,7 +34,7 @@ public class CategoriesController {
             var result = genericGetDataWithFilterSortPgn.Apply(entityManager, requestData, Category.class);
             return result;
         } catch (Exception e) {
-            return GenericResultClass.Error(e, logger);
+            return GenericResultClass.Exception(e, logger);
         }
     }
 
@@ -43,12 +43,12 @@ public class CategoriesController {
         try {
 
             var isDataExists = service.existsById(category.id);
-            if (isDataExists) throw new Exception("The record already exist!");
+            if (isDataExists) return GenericResultClass.UnSuccessful("The record already exist!");
 
             service.save(category);
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
-            return GenericResultClass.Error(e, logger);
+            return GenericResultClass.Exception(e, logger);
         }
     }
 
@@ -57,11 +57,11 @@ public class CategoriesController {
         try {
 
             var isDataExists = service.existsById(category.id);
-            if (!isDataExists) throw new Exception("The record does not exist!");
+            if (!isDataExists) return GenericResultClass.UnSuccessful("The record does not exist!");
             service.save(category);
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
-            return GenericResultClass.Error(e, logger);
+            return GenericResultClass.Exception(e, logger);
         }
     }
 
@@ -71,7 +71,7 @@ public class CategoriesController {
             service.deleteById(id);
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
-            return GenericResultClass.Error(e, logger);
+            return GenericResultClass.Exception(e, logger);
         }
     }
 

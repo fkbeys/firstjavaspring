@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GenericResultClass> handleException(Exception ex) {
 
-        GenericResultClass genericResult = GenericResultClass.Error(ex, logger);
+        GenericResultClass genericResult = GenericResultClass.Exception(ex, logger);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(genericResult);
     }
 
