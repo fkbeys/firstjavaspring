@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api;
+package com.kayaspring.kayaspring.Api.Controllers;
 
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;

@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Data;
+package com.kayaspring.kayaspring.Business.Managers;
 
 import com.kayaspring.kayaspring.Entities.Models.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
