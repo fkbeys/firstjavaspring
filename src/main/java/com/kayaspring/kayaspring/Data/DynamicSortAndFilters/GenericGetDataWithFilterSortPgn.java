@@ -14,11 +14,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 @Repository
-public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn<T> {
+public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn {
 
     @Override
     public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {
@@ -58,7 +59,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
             return jsonStringToList(columnFilters, new TypeReference<List<ColumnFilterModel>>() {
             });
         } catch (Exception e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -67,7 +68,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
             return jsonStringToList(columnSorts, new TypeReference<List<ColumnSortModel>>() {
             });
         } catch (Exception e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -76,11 +77,12 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         try {
             return objectMapper.readValue(jsonString, typeReference);
         } catch (IOException e) {
-            throw new RuntimeException("JSON stringi parse error.", e);
+            //throw new RuntimeException("JSON stringi parse error.", e);
+            return Collections.emptyList();
         }
     }
 
-    private Long CountThePredictedData(TypedQuery typedQuery) {
+    private Long CountThePredictedData(TypedQuery<T> typedQuery) {
         Long count = typedQuery.getResultStream().count();
         return count;
     }
@@ -121,7 +123,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         return predicates;
     }
 
-    private <T> Predicate buildStringPredicate(CriteriaBuilder cb, Path<Object> field, ColumnFilterModel filter) {
+    private Predicate buildStringPredicate(CriteriaBuilder cb, Path<Object> field, ColumnFilterModel filter) {
         return cb.like(cb.lower(field.as(String.class)), "%" + filter.value.toString().toLowerCase() + "%");
     }
 
@@ -145,7 +147,10 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
 
     private <T> Predicate buildDateTimePredicate(CriteriaBuilder cb, Root<T> root, ColumnFilterModel filter) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
+        // String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
+        String[] values = filter.value.toString().replaceAll("[\\[\\]\",]", "").split(",");
+
+
         LocalDate startDate;
         LocalDate endDate;
         if (values.length > 1) {
@@ -158,7 +163,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         return cb.between(root.get(filter.id).as(LocalDate.class), startDate, endDate);
     }
 
-    private TypedQuery ApplyThePagination(TypedQuery typedQuery, int page, int size) {
+    private TypedQuery<T> ApplyThePagination(TypedQuery typedQuery, int page, int size) {
         typedQuery.setFirstResult(page * size);
         typedQuery.setMaxResults(size);
         return typedQuery;
