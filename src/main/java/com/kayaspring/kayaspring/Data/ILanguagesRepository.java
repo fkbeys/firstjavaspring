@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Data;
 
-import com.kayaspring.kayaspring.Models.Category;
+import com.kayaspring.kayaspring.Entities.Models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

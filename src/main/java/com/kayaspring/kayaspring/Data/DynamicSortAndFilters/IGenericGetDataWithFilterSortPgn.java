@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.DynamicSortAndFilters;
+package com.kayaspring.kayaspring.Data.DynamicSortAndFilters;
 
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;

@@ -1,7 +1,7 @@
-package com.kayaspring.kayaspring.Middlewares;
+package com.kayaspring.kayaspring.Api.Middlewares;
 
 import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GenericResultClass> handleException(Exception ex) {
 
-        GenericResultClass genericResult = GenericResultClass.Error(ex,logger);
+        GenericResultClass genericResult = GenericResultClass.Error(ex, logger);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(genericResult);
     }
 

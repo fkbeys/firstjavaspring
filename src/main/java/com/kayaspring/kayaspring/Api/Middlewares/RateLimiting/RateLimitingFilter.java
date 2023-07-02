@@ -1,14 +1,12 @@
-package com.kayaspring.kayaspring.Middlewares.RateLimiting;
+package com.kayaspring.kayaspring.Api.Middlewares.RateLimiting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kayaspring.kayaspring.Common.GenericResultClass;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
-import nonapi.io.github.classgraph.json.JSONSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,11 +35,13 @@ public class RateLimitingFilter implements jakarta.servlet.Filter {
             httpResponse.setContentType("application/json");
             httpResponse.setStatus(429);
 
-            var str = GenericResultClass.Error(new IOException("too many requests..."), null);
+            //var str = GenericResultClass.Error(new IOException("too many requests..."), null);
 
             Map<String, Object> anonymousObject = new HashMap<>();
-            anonymousObject.put("message", str.getMessage());
-            anonymousObject.put("success", str.isSuccess());
+            anonymousObject.put("message", "too many request..");
+            anonymousObject.put("isSuccess", false);
+            anonymousObject.put("data", "");
+            anonymousObject.put("totalItemCount", 0);
             String json = new ObjectMapper().writeValueAsString(anonymousObject);
             httpResponse.getWriter().append(json);
         }

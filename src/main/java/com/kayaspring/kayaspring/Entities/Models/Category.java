@@ -1,10 +1,11 @@
-package com.kayaspring.kayaspring.Models;
+package com.kayaspring.kayaspring.Entities.Models;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="category")
+@Table(name = "category")
 public class Category extends BaseClass {
 
     public String name;

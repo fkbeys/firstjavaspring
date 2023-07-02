@@ -1,10 +1,11 @@
-package com.kayaspring.kayaspring.Models;
+package com.kayaspring.kayaspring.Entities.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name="Word")
+@Table(name = "Word")
 public class Word extends BaseClass {
 
     public int languageId;

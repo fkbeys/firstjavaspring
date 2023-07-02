@@ -1,11 +1,11 @@
-package com.kayaspring.kayaspring.Controllers;
+package com.kayaspring.kayaspring.Api;
 
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Managers.ICategoryManager;
-import com.kayaspring.kayaspring.DynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;
-import com.kayaspring.kayaspring.Middlewares.Logging.ILogger;
-import com.kayaspring.kayaspring.Models.Category;
+import com.kayaspring.kayaspring.Data.DynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;
+import com.kayaspring.kayaspring.Business.Managers.ICategoryManager;
+import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.Entities.Models.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

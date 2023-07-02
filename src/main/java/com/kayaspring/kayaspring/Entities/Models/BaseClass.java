@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Models;
+package com.kayaspring.kayaspring.Entities.Models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;

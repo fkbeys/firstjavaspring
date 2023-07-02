@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Data;
 
-import com.kayaspring.kayaspring.Models.AppUser;
+import com.kayaspring.kayaspring.Entities.Models.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

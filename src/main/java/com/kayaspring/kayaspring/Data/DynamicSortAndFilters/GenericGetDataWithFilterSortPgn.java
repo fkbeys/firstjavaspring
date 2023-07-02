@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.DynamicSortAndFilters;
+package com.kayaspring.kayaspring.Data.DynamicSortAndFilters;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,8 +18,7 @@ import java.util.List;
 
 
 @Repository
-public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn
-{
+public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn {
 
     @Override
     public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {

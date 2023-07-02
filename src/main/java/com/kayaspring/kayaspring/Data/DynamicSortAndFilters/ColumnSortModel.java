@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.DynamicSortAndFilters;
+package com.kayaspring.kayaspring.Data.DynamicSortAndFilters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
