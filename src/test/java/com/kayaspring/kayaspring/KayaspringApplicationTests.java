@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class KayaspringApplicationTests {
     @Test
     void contextLoads() {
-        // Add assertion
         int expected = 5;
         int actual = calculateSomeValue();
         Assertions.assertEquals(expected, actual, "The calculated value should be 5");
