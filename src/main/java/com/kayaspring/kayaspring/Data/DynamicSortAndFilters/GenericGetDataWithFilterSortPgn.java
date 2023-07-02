@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @Repository
-public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn {
+public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn<T> {
 
     @Override
     public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {
@@ -47,7 +47,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         //TODO: Performance issue with this method. Needs to be changed as soon as possible.
         Long count = CountThePredictedData(typedQuery);
 
-        typedQuery = ApplyThePagination(typedQuery, page, size);
+        ApplyThePagination(typedQuery, page, size);
 
         var data = typedQuery.getResultList();
         return GenericResultClass.Success(data, count);

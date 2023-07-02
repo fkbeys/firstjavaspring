@@ -35,8 +35,6 @@ public class RateLimitingFilter implements jakarta.servlet.Filter {
             httpResponse.setContentType("application/json");
             httpResponse.setStatus(429);
 
-            //var str = GenericResultClass.Error(new IOException("too many requests..."), null);
-
             Map<String, Object> anonymousObject = new HashMap<>();
             anonymousObject.put("message", "too many request..");
             anonymousObject.put("isSuccess", false);
