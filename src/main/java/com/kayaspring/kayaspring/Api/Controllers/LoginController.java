@@ -24,13 +24,13 @@ public class LoginController {
     }
 
     @PostMapping("/Login")
-    public GenericResultClass login(@RequestBody AuthRequest authRequest) throws Exception {
+    public GenericResultClass login(@RequestBody AuthRequest authRequest) {
 
         if (authenticate(authRequest.username, authRequest.password)) {
             String token = authenticationService.generateToken(authRequest.username);
             return GenericResultClass.Success(token, 0);
         }
-        throw new Exception("Wrong username or password");
+        return GenericResultClass.UnSuccessful("Wrong username or password");
     }
 
     private boolean authenticate(String username, String password) {

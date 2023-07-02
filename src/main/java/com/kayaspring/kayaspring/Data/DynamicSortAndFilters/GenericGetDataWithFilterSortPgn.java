@@ -2,6 +2,7 @@ package com.kayaspring.kayaspring.Data.DynamicSortAndFilters;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import jakarta.persistence.EntityManager;
@@ -20,6 +21,12 @@ import java.util.List;
 
 @Repository
 public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFilterSortPgn {
+
+    private final ILogger logger;
+
+    public GenericGetDataWithFilterSortPgn(ILogger logger) {
+        this.logger = logger;
+    }
 
     @Override
     public GenericResultClass Apply(EntityManager entityManager, GenericRequestDataClass request, Class tClass) {
@@ -77,7 +84,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         try {
             return objectMapper.readValue(jsonString, typeReference);
         } catch (IOException e) {
-            //throw new RuntimeException("JSON stringi parse error.", e);
+            logger.log("JsonError", "JSON stringi parse error.");
             return Collections.emptyList();
         }
     }
@@ -147,7 +154,6 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
 
     private <T> Predicate buildDateTimePredicate(CriteriaBuilder cb, Root<T> root, ColumnFilterModel filter) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // String[] values = filter.value.toString().replaceAll("\\[|\\]|\"", "").split(",");
         String[] values = filter.value.toString().replaceAll("[\\[\\]\",]", "").split(",");
 
 
@@ -163,7 +169,7 @@ public class GenericGetDataWithFilterSortPgn<T> implements IGenericGetDataWithFi
         return cb.between(root.get(filter.id).as(LocalDate.class), startDate, endDate);
     }
 
-    private TypedQuery<T> ApplyThePagination(TypedQuery typedQuery, int page, int size) {
+    private TypedQuery<T> ApplyThePagination(TypedQuery<T> typedQuery, int page, int size) {
         typedQuery.setFirstResult(page * size);
         typedQuery.setMaxResults(size);
         return typedQuery;

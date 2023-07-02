@@ -14,7 +14,7 @@ public class BucketConfiguration {
 
     @Bean
     public Bucket bucket() {
-        long overdraft = 4;
+        long overdraft = 20;
         Refill refill = Refill.greedy(2, Duration.ofMinutes(1));
         Bandwidth limit = Bandwidth.classic(overdraft, refill);
         return Bucket4j.builder().addLimit(limit).build();
