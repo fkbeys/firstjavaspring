@@ -19,6 +19,8 @@ public class LogService implements ILogger {
         logLevel = logLevel.length() > 10 ? logLevel.substring(0, 10) : logLevel;
 
         String sql = "INSERT INTO logs (log_level, log_message, created_at) VALUES (?, ?, NOW())";
+
+
         jdbcTemplate.update(sql, logLevel, logMessage);
     }
 }

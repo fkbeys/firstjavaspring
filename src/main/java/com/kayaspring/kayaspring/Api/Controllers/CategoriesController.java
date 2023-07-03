@@ -1,7 +1,7 @@
 package com.kayaspring.kayaspring.Api.Controllers;
 
 import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
-import com.kayaspring.kayaspring.Business.Managers.ICategoryManager;
+import com.kayaspring.kayaspring.Data.Repositories.ICategoryRepository;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.DynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;
@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Transactional
-@RequestMapping("Api/Categories")
+@RequestMapping("api/categories")
 public class CategoriesController {
 
-    private final ICategoryManager service;
+    private final ICategoryRepository service;
     private final IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn;
     private final ILogger logger;
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CategoriesController(ICategoryManager service, IGenericGetDataWithFilterSortPgn genericFilterAndSorting, ILogger logger) {
+    public CategoriesController(ICategoryRepository service, IGenericGetDataWithFilterSortPgn genericFilterAndSorting, ILogger logger) {
         this.service = service;
         this.genericGetDataWithFilterSortPgn = genericFilterAndSorting;
         this.logger = logger;
     }
 
-    @PostMapping("Get")
+    @PostMapping("get")
     public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
         try {
             var result = genericGetDataWithFilterSortPgn.Apply(entityManager, requestData, Category.class);
@@ -38,7 +38,7 @@ public class CategoriesController {
         }
     }
 
-    @PostMapping("Post")
+    @PostMapping("post")
     public GenericResultClass Post(@RequestBody Category category) {
         try {
 
@@ -52,7 +52,7 @@ public class CategoriesController {
         }
     }
 
-    @PutMapping("Update")
+    @PutMapping("update")
     public GenericResultClass Update(@RequestBody Category category) {
         try {
 
@@ -65,7 +65,7 @@ public class CategoriesController {
         }
     }
 
-    @DeleteMapping("Delete/{id}")
+    @DeleteMapping("delete/{id}")
     public GenericResultClass Delete(@PathVariable("id") long id) {
         try {
             service.deleteById(id);
