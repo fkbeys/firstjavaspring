@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Entities.Models.User;
 
-import com.kayaspring.kayaspring.Entities.Enums.ERole;
+import com.kayaspring.kayaspring.Entities.Enums.UserRoleEnums;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,12 +11,12 @@ public class UserRole {
     private Integer id;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ERole name;
+    private UserRoleEnums name;
 
     public UserRole() {
     }
 
-    public UserRole(ERole name) {
+    public UserRole(UserRoleEnums name) {
         this.name = name;
     }
 
@@ -28,11 +28,11 @@ public class UserRole {
         this.id = id;
     }
 
-    public ERole getName() {
+    public UserRoleEnums getName() {
         return name;
     }
 
-    public void setName(ERole name) {
+    public void setName(UserRoleEnums name) {
         this.name = name;
     }
 }

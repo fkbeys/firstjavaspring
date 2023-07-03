@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Entities.Enums;
 
-public enum ERole {
+public enum UserRoleEnums {
     ROLE_USER,
     ROLE_MODERATOR,
     ROLE_ADMIN

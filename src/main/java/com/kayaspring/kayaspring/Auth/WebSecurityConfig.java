@@ -18,8 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-
-
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
@@ -38,6 +36,7 @@ public class WebSecurityConfig {
     }
 
     private final JwtUtils jwtUtils;
+
     @Bean
     public Filter authenticationJwtTokenFilter() {
         return new AuthTokenFilter(jwtUtils, userDetailsService, logger);
@@ -69,8 +68,11 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
+
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
+                                .requestMatchers("/actuator/health").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/error/**").permitAll()
                                 .anyRequest().authenticated()
                 );

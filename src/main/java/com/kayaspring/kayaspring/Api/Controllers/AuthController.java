@@ -5,7 +5,7 @@ import com.kayaspring.kayaspring.Auth.JwtUtils;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.Repositories.IRoleRepository;
 import com.kayaspring.kayaspring.Data.Repositories.IUserRepository;
-import com.kayaspring.kayaspring.Entities.Enums.ERole;
+import com.kayaspring.kayaspring.Entities.Enums.UserRoleEnums;
 import com.kayaspring.kayaspring.Entities.Models.User.AppUser;
 import com.kayaspring.kayaspring.Entities.Models.User.UserDetailsImpl;
 import com.kayaspring.kayaspring.Entities.Models.User.UserRole;
@@ -65,12 +65,6 @@ public class AuthController {
             List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
-
-
-//        return ResponseEntity
-//                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
-//
-
             return GenericResultClass.Success(jwt, 1);
         } catch (Exception ex) {
             return GenericResultClass.Exception(ex, logger);
@@ -99,26 +93,26 @@ public class AuthController {
         Set<UserRole> roles = new HashSet<>();
 
         if (strRoles == null) {
-            UserRole userRole = roleRepository.findByName(ERole.ROLE_USER)
+            UserRole userRole = roleRepository.findByName(UserRoleEnums.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        UserRole adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        UserRole adminRole = roleRepository.findByName(UserRoleEnums.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        UserRole modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                        UserRole modRole = roleRepository.findByName(UserRoleEnums.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
 
                         break;
                     default:
-                        UserRole userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        UserRole userRole = roleRepository.findByName(UserRoleEnums.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }
