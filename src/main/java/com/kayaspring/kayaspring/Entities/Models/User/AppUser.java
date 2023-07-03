@@ -41,6 +41,8 @@ public class AppUser {
         this.password = password;
     }
 
+//    public int age;
+
     public Long getId() {
         return id;
     }

@@ -14,12 +14,24 @@ public class BaseClass {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    public Long id;
+    private Long id;
+
+
+    public Long getId() {
+
+        return id == null ? 0L : id;
+
+    }
+
+    public void setId(Long id) {
+
+        this.id = id;
+    }
 
     @Column(name = "createDate")
     public Date createDate;
 
     @Column(name = "createUser")
-    public int createUser;
+    public long createUser;
 
 }
