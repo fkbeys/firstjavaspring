@@ -32,13 +32,15 @@ public class WebSecurityConfig {
 
     private final ILogger logger;
 
-    public WebSecurityConfig(ILogger logger) {
+    public WebSecurityConfig(ILogger logger, JwtUtils jwtUtils) {
         this.logger = logger;
+        this.jwtUtils = jwtUtils;
     }
 
+    private final JwtUtils jwtUtils;
     @Bean
     public Filter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter(logger);
+        return new AuthTokenFilter(jwtUtils, userDetailsService, logger);
     }
 
     @Bean

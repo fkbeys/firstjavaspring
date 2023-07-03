@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public interface IUserRepository extends JpaRepository<AppUser, Long>, JpaSpecificationExecutor<AppUser> {
 
@@ -14,7 +12,7 @@ public interface IUserRepository extends JpaRepository<AppUser, Long>, JpaSpecif
 //    boolean existsByUsernameAndPassword(String username, String password);
 //
 
-    Optional<AppUser> findByUsername(String username);
+    AppUser findByUsername(String username);
 
     Boolean existsByUsername(String username);
 
