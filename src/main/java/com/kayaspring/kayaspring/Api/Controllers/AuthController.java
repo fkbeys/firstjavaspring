@@ -11,7 +11,6 @@ import com.kayaspring.kayaspring.Entities.Models.User.UserDetailsImpl;
 import com.kayaspring.kayaspring.Entities.Models.User.UserRole;
 import com.kayaspring.kayaspring.Entities.Requests.LoginRequest;
 import com.kayaspring.kayaspring.Entities.Requests.SignupRequest;
-import com.kayaspring.kayaspring.Entities.Responses.MessageResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +42,7 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
-   private final ILogger logger;
+    private final ILogger logger;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -52,64 +51,47 @@ public class AuthController {
         this.logger = logger;
     }
 
-//    @PostMapping("/signin")
-//    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-//
-//        Authentication authentication = authenticationManager
-//                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = jwtUtils.generateJwtToken(authentication);
-//
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity
-//                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
-//    }
-
     @PostMapping("/signin")
     public GenericResultClass authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-       try {
-           Authentication authentication = authenticationManager
-                   .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-           SecurityContextHolder.getContext().setAuthentication(authentication);
-           String jwt = jwtUtils.generateJwtToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-           UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-           List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                   .collect(Collectors.toList());
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
 //        return ResponseEntity
 //                .ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 //
 
-           return GenericResultClass.Success(userDetails,1);
-       }catch (Exception ex)
-       {
-           return GenericResultClass.Exception(ex,logger);
-       }
+            return GenericResultClass.Success(userDetails, 1);
+        } catch (Exception ex) {
+            return GenericResultClass.Exception(ex, logger);
+        }
 
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+
+        GenericResultClass result = null;
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            result = GenericResultClass.UnSuccessful("Error: Username is already taken!");
+            return ResponseEntity.badRequest().body(result);
         }
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            result = GenericResultClass.UnSuccessful("Error: Email is already in use!");
+            return ResponseEntity.badRequest().body(result);
         }
 
-        // Create new user's account
         AppUser user = new AppUser(signUpRequest.getUsername(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-       // List<String> strRoles = signUpRequest.role.split(",");
         List<String> strRoles = Arrays.asList(signUpRequest.role.split(","));
 
         Set<UserRole> roles = new HashSet<>();
@@ -140,10 +122,10 @@ public class AuthController {
                 }
             });
         }
-
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        result = GenericResultClass.Success("User registered successfully!", 1);
+        return ResponseEntity.ok(result);
     }
 }

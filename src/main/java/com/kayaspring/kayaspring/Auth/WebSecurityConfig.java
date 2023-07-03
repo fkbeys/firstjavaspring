@@ -1,5 +1,6 @@
 package com.kayaspring.kayaspring.Auth;
 
+import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Business.Services.UserDetailsServiceImpl;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,16 @@ public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+
+    private final ILogger logger;
+
+    public WebSecurityConfig(ILogger logger) {
+        this.logger = logger;
+    }
+
     @Bean
     public Filter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+        return new AuthTokenFilter(logger);
     }
 
     @Bean
