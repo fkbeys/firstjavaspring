@@ -10,6 +10,7 @@ import com.kayaspring.kayaspring.Entities.Models.Category;
 import com.kayaspring.kayaspring.Entities.Models.User.UserDetailsImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +50,7 @@ public class CategoriesController {
     }
 
     @PostMapping("post")
-    public GenericResultClass Post(@RequestBody Category category) {
+    public GenericResultClass Post(@Valid @RequestBody Category category) {
         try {
 
             UserDetailsImpl currentUser = authenticationService.getCurrentUser();
