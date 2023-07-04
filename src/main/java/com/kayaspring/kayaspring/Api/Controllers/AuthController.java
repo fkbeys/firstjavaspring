@@ -23,7 +23,7 @@ public class AuthController {
     @PostMapping("/signin")
     public GenericResultClass authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-       return authenticationService.authenticateUser(loginRequest);
+        return authenticationService.authenticateUser(loginRequest);
 
     }
 
