@@ -41,7 +41,7 @@ public class CategoryService {
     }
 
 
-    public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
+    public GenericResultClass getWithFilterSortPage(@RequestBody GenericRequestDataClass requestData) {
         try {
 
             UserDetailsImpl currentUser = authenticationService.getCurrentUser();

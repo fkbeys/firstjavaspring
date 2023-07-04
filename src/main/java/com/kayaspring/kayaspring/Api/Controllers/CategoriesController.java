@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-
 @RequestMapping("api/categories")
 public class CategoriesController {
 
@@ -18,8 +17,8 @@ public class CategoriesController {
     }
 
     @PostMapping("get")
-    public GenericResultClass get(@RequestBody GenericRequestDataClass requestData) {
-        return service.Get(requestData);
+    public GenericResultClass getWithFilterSortPage(@RequestBody GenericRequestDataClass requestData) {
+        return service.getWithFilterSortPage(requestData);
     }
 
 
