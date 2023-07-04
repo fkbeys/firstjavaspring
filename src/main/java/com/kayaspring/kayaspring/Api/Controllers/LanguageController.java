@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/languages")
 public class LanguageController {
 
-    private final IService service;
+    private final IService<Language> service;
 
     public LanguageController(LanguageService service) {
         this.service = service;

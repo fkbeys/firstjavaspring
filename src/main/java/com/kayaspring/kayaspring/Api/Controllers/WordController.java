@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/words")
 public class WordController {
 
-    private final IService service;
+    private final IService<Word> service;
 
     public WordController(WordService service) {
         this.service = service;
@@ -24,7 +24,7 @@ public class WordController {
 
 
     @PostMapping("/post")
-    public GenericResultClass upsert(@Valid  @RequestBody Word model) {
+    public GenericResultClass upsert(@Valid @RequestBody Word model) {
         return service.upsert(model);
     }
 
