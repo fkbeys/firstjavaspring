@@ -7,6 +7,8 @@ import com.kayaspring.kayaspring.Entities.Models.Word;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("api/words")
 public class WordController {

@@ -7,7 +7,7 @@ import com.kayaspring.kayaspring.Entities.Requests.SignupRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

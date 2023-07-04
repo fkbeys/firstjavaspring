@@ -7,7 +7,7 @@ import com.kayaspring.kayaspring.Entities.Models.Language;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("api/languages")
 public class LanguageController {
