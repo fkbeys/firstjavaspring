@@ -5,7 +5,6 @@ import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Entities.Requests.LoginRequest;
 import com.kayaspring.kayaspring.Entities.Requests.SignupRequest;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public GenericResultClass registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return authenticationService.registerUser(signUpRequest);
     }
 }

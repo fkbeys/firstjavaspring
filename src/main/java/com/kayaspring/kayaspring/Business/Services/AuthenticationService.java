@@ -12,7 +12,6 @@ import com.kayaspring.kayaspring.Entities.Models.User.UserRole;
 import com.kayaspring.kayaspring.Entities.Requests.LoginRequest;
 import com.kayaspring.kayaspring.Entities.Requests.SignupRequest;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -79,16 +78,17 @@ public class AuthenticationService {
     }
 
 
-    public ResponseEntity registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public GenericResultClass registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         GenericResultClass result = null;
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            result = GenericResultClass.UnSuccessful("Error: Username is already taken!");
-            return ResponseEntity.badRequest().body(result);
+            return GenericResultClass.UnSuccessful("Error: Username is already taken!");
+            //return ResponseEntity.badRequest().body(result);
+
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            result = GenericResultClass.UnSuccessful("Error: Email is already in use!");
-            return ResponseEntity.badRequest().body(result);
+            return GenericResultClass.UnSuccessful("Error: Email is already in use!");
+            //return ResponseEntity.badRequest().body(result);
         }
 
         AppUser user = new AppUser(signUpRequest.getUsername(), signUpRequest.getEmail(),
@@ -127,8 +127,8 @@ public class AuthenticationService {
         user.setRoles(roles);
         userRepository.save(user);
 
-        result = GenericResultClass.Success("User registered successfully!", 1);
-        return ResponseEntity.ok(result);
+        return GenericResultClass.Success("User registered successfully!", 1);
+
     }
 
     public UserDetailsImpl getCurrentUser() {
@@ -139,7 +139,6 @@ public class AuthenticationService {
         }
         return (UserDetailsImpl) authentication.getPrincipal();
     }
-
 
 
 }
