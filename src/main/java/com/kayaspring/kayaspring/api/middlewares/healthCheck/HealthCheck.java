@@ -17,11 +17,7 @@ public class HealthCheck implements HealthIndicator {
     @Override
     public Health health() {
 
-
-        var isHealthy = userService.count() > 0 ? true : false;
-
-
-        if (isHealthy) {
+        if (userService.count()>0) {
             return Health.up().build();
         } else {
             return Health.down().build();
