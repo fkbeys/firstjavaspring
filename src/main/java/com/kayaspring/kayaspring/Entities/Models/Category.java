@@ -20,14 +20,9 @@ public class Category extends BaseClass {
         this.name = name;
         this.headerId = headerId;
         this.subId = subId;
-        if (this.getId() == null) {
-            this.setId(0L);
-        }
-        this.setCreateUser(createUserId);
-
-        this.setCreateDate(new Date());
-
-
+        this.id = this.id == null ? 0 : this.id;
+        this.createUser = createUserId;
+        this.createDate = new Date();
     }
 
     @NotNull

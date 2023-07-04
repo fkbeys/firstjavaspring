@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Controllers;
+package com.kayaspring.kayaspring.Business.Services;
 
 import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Auth.AuthenticationService;
@@ -10,7 +10,10 @@ import com.kayaspring.kayaspring.Entities.Models.Category;
 import com.kayaspring.kayaspring.Entities.Models.User.UserDetailsImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -18,31 +21,28 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@RestController
+@Service
+public class CategoryService {
 
-@RequestMapping("api/categories")
-public class CategoriesController {
 
-    private final ICategoryRepository service;
+    private final ICategoryRepository categoryRepository;
     private final IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn;
-    private final ILogger logger;
-
     private final AuthenticationService authenticationService;
+    private final ILogger logger;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CategoriesController(ICategoryRepository service, IGenericGetDataWithFilterSortPgn genericFilterAndSorting, ILogger logger,
-                                AuthenticationService authenticationService) {
-        this.service = service;
-        this.genericGetDataWithFilterSortPgn = genericFilterAndSorting;
-        this.logger = logger;
-
+    public CategoryService(ICategoryRepository categoryRepository, IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn,
+                           AuthenticationService authenticationService, ILogger logger) {
+        this.categoryRepository = categoryRepository;
+        this.genericGetDataWithFilterSortPgn = genericGetDataWithFilterSortPgn;
         this.authenticationService = authenticationService;
+        this.logger = logger;
     }
 
-    @PostMapping("get")
-    public GenericResultClass get(@RequestBody GenericRequestDataClass requestData) {
+
+    public GenericResultClass Get(@RequestBody GenericRequestDataClass requestData) {
         try {
 
             UserDetailsImpl currentUser = authenticationService.getCurrentUser();
@@ -54,9 +54,7 @@ public class CategoriesController {
         }
     }
 
-
-    @PostMapping("/post")
-    public GenericResultClass upsert(@RequestParam String name, @RequestParam int headerId, @RequestParam int subId, @RequestParam MultipartFile imageFile) {
+    public GenericResultClass post(@RequestParam String name, @RequestParam int headerId, @RequestParam int subId, @RequestParam MultipartFile imageFile) {
         try {
 
             UserDetailsImpl currentUser = authenticationService.getCurrentUser();
@@ -74,7 +72,7 @@ public class CategoriesController {
                 category.setImagePath(path.toString());
             }
 
-            service.save(category);
+            categoryRepository.save(category);
 
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
@@ -82,11 +80,9 @@ public class CategoriesController {
         }
     }
 
-
-    @DeleteMapping("delete/{id}")
     public GenericResultClass delete(@PathVariable("id") long id) {
         try {
-            service.deleteById(id);
+            categoryRepository.deleteById(id);
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
             return GenericResultClass.Exception(e, logger);
