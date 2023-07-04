@@ -41,6 +41,15 @@ public class CategoryService {
     }
 
 
+    public GenericResultClass getAll() {
+        try {
+            var data = categoryRepository.findAll();
+            return GenericResultClass.Success(data, data.stream().count());
+        } catch (Exception ex) {
+            return GenericResultClass.Exception(ex, logger);
+        }
+    }
+
     public GenericResultClass getWithFilterSortPage(@RequestBody GenericRequestDataClass requestData) {
         try {
 

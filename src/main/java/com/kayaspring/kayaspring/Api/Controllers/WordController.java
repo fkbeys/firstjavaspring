@@ -4,6 +4,7 @@ import com.kayaspring.kayaspring.Business.Services.IService;
 import com.kayaspring.kayaspring.Business.Services.WordService;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Entities.Models.Word;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,13 +24,13 @@ public class WordController {
 
 
     @PostMapping("/post")
-    public GenericResultClass upsert(@RequestBody Word model) {
+    public GenericResultClass upsert(@Valid  @RequestBody Word model) {
         return service.upsert(model);
     }
 
 
     @DeleteMapping("delete/{id}")
-    public GenericResultClass delete(@PathVariable("id") long id) {
+    public GenericResultClass delete(@Valid @PathVariable("id") long id) {
         return service.delete(id);
     }
 

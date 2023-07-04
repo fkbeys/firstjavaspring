@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares;
+package com.kayaspring.kayaspring.Api.Middlewares.Exceptions;
 
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;

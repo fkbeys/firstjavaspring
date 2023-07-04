@@ -1,5 +1,6 @@
 package com.kayaspring.kayaspring.Entities.Models.User;
 
+import com.kayaspring.kayaspring.Entities.Models.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -32,6 +33,11 @@ public class AppUser {
     @JoinTable(name = "UserRoleRelation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRole> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "UserCategoryRelation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+
     public AppUser() {
     }
 
@@ -41,7 +47,6 @@ public class AppUser {
         this.password = password;
     }
 
-//    public int age;
 
     public Long getId() {
         return id;
@@ -82,5 +87,5 @@ public class AppUser {
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
-// getters and setters
+
 }

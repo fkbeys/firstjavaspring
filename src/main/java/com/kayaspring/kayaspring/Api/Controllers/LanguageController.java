@@ -4,6 +4,7 @@ import com.kayaspring.kayaspring.Business.Services.IService;
 import com.kayaspring.kayaspring.Business.Services.LanguageService;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Entities.Models.Language;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,13 +24,13 @@ public class LanguageController {
     }
 
     @PostMapping("/post")
-    public GenericResultClass upsert(@RequestBody Language model) {
+    public GenericResultClass upsert(@Valid  @RequestBody Language model) {
         return service.upsert(model);
     }
 
 
     @DeleteMapping("delete/{id}")
-    public GenericResultClass delete(@PathVariable("id") long id) {
+    public GenericResultClass delete(@Valid @PathVariable("id") long id) {
         return service.delete(id);
     }
 
