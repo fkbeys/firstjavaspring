@@ -1,5 +1,4 @@
 package com.kayaspring.kayaspring.entities.models.User;
-
 import com.kayaspring.kayaspring.entities.models.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
