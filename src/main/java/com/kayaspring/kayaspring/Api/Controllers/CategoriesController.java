@@ -10,12 +10,17 @@ import com.kayaspring.kayaspring.Entities.Models.Category;
 import com.kayaspring.kayaspring.Entities.Models.User.UserDetailsImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.Valid;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@Transactional
+
 @RequestMapping("api/categories")
 public class CategoriesController {
 
@@ -49,33 +54,37 @@ public class CategoriesController {
         }
     }
 
-    @PostMapping("post")
-    public GenericResultClass Post(@Valid @RequestBody Category category) {
+
+    @PostMapping("/post")
+    public GenericResultClass post(@RequestParam String name, @RequestParam int headerId, @RequestParam int subId, @RequestParam("image") Optional<MultipartFile> imageOptional) {
         try {
 
             UserDetailsImpl currentUser = authenticationService.getCurrentUser();
-            category.createUser = currentUser.getId();
-            var isDataExists = service.existsById(category.getId());
-            if (isDataExists) return GenericResultClass.UnSuccessful("The record already exist!");
+            Category category = new Category(name, headerId, subId,currentUser.getId());
+
+
+            if (imageOptional.isPresent()) {
+                MultipartFile image = imageOptional.get();
+                byte[] bytes = image.getBytes();
+                String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                String uploadDirectory = System.getProperty("user.dir") + "/uploads/" + fileName;
+                Path path = Paths.get(uploadDirectory);
+
+                Files.write(path, bytes);
+                category.setImagePath(path.toString());
+            }
+            if (category.getId() == 0) {
+                category.setId(0L);
+            }
+
             service.save(category);
+
             return GenericResultClass.Success(true, 0);
         } catch (Exception e) {
             return GenericResultClass.Exception(e, logger);
         }
     }
 
-    @PutMapping("update")
-    public GenericResultClass Update(@RequestBody Category category) {
-        try {
-
-            var isDataExists = service.existsById(category.getId());
-            if (!isDataExists) return GenericResultClass.UnSuccessful("The record does not exist!");
-            service.save(category);
-            return GenericResultClass.Success(true, 0);
-        } catch (Exception e) {
-            return GenericResultClass.Exception(e, logger);
-        }
-    }
 
     @DeleteMapping("delete/{id}")
     public GenericResultClass Delete(@PathVariable("id") long id) {

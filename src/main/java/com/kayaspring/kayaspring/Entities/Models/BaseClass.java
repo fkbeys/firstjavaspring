@@ -14,7 +14,7 @@ import java.util.Date;
 public class BaseClass {
     @Id
     @GeneratedValue
-    @Column(name = "id",nullable = false)
+    @Column(name = "id", nullable = false)
     @NotNull
     private Long id;
 
@@ -27,16 +27,38 @@ public class BaseClass {
 
     public void setId(Long id) {
 
-        this.id = id;
+        if (this.id == null) {
+            this.id = 0L;
+
+        } else {
+            this.id = id;
+
+        }
+
     }
 
-    @Column(name = "createDate",nullable = false)
+    @Column(name = "createDate", nullable = false)
     @NotNull
-    public Date createDate;
+    private Date createDate;
 
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-    @Column(name = "createUser",nullable = false)
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(long createUser) {
+        this.createUser = createUser;
+    }
+
+    @Column(name = "createUser", nullable = false)
     @NotNull
-    public long createUser;
+    private long createUser;
 
 }
