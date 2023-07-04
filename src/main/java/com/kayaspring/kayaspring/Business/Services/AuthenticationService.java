@@ -29,23 +29,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
-
-
     private final AuthenticationManager authenticationManager;
-
-
     private final IUserRepository userRepository;
-
-
     private final IRoleRepository roleRepository;
-
-
     private final PasswordEncoder encoder;
     private final ILogger logger;
 
-
     private final JwtUtils jwtUtils;
-
 
     public AuthenticationService(AuthenticationManager authenticationManager, IUserRepository userRepository, IRoleRepository roleRepository, PasswordEncoder encoder, ILogger logger, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
@@ -55,7 +45,6 @@ public class AuthenticationService {
         this.logger = logger;
         this.jwtUtils = jwtUtils;
     }
-
 
     public GenericResultClass authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -77,18 +66,16 @@ public class AuthenticationService {
 
     }
 
-
     public GenericResultClass registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         GenericResultClass result = null;
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return GenericResultClass.UnSuccessful("Error: Username is already taken!");
-            //return ResponseEntity.badRequest().body(result);
 
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return GenericResultClass.UnSuccessful("Error: Email is already in use!");
-            //return ResponseEntity.badRequest().body(result);
+
         }
 
         AppUser user = new AppUser(signUpRequest.getUsername(), signUpRequest.getEmail(),
@@ -139,6 +126,5 @@ public class AuthenticationService {
         }
         return (UserDetailsImpl) authentication.getPrincipal();
     }
-
 
 }
