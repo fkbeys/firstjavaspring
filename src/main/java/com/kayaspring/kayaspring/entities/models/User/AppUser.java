@@ -1,4 +1,5 @@
 package com.kayaspring.kayaspring.entities.models.User;
+
 import com.kayaspring.kayaspring.entities.models.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -35,6 +36,10 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "UserCategoryRelation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+
+    public long mainLanguage;
+    public long targetLanguage;
 
 
     public AppUser() {
@@ -85,6 +90,14 @@ public class AppUser {
 
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public void setUserCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
     }
 
 }

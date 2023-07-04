@@ -42,5 +42,10 @@ public class CategoriesController {
         return service.delete(id);
     }
 
+    @PostMapping("AddCategoryToUsersFavoritCategories/{id}")
+    public GenericResultClass AddCategoryToUsersFavoritCategories(@Valid @PathVariable long id) {
+        return service.AddCategoryToUsersFavoritCategories(id);
+    }
+
 
 }

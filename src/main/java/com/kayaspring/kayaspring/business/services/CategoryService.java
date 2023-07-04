@@ -5,7 +5,9 @@ import com.kayaspring.kayaspring.common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.common.GenericResultClass;
 import com.kayaspring.kayaspring.data.dynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;
 import com.kayaspring.kayaspring.data.repositories.ICategoryRepository;
+import com.kayaspring.kayaspring.data.repositories.IUserRepository;
 import com.kayaspring.kayaspring.entities.models.Category;
+import com.kayaspring.kayaspring.entities.models.User.AppUser;
 import com.kayaspring.kayaspring.entities.models.User.UserDetailsImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -25,6 +27,7 @@ public class CategoryService {
 
 
     private final ICategoryRepository categoryRepository;
+    private final IUserRepository userRepository;
     private final IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn;
     private final AuthenticationService authenticationService;
     private final ILogger logger;
@@ -32,9 +35,10 @@ public class CategoryService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CategoryService(ICategoryRepository categoryRepository, IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn,
+    public CategoryService(ICategoryRepository categoryRepository, IUserRepository userRepository, IGenericGetDataWithFilterSortPgn genericGetDataWithFilterSortPgn,
                            AuthenticationService authenticationService, ILogger logger) {
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
         this.genericGetDataWithFilterSortPgn = genericGetDataWithFilterSortPgn;
         this.authenticationService = authenticationService;
         this.logger = logger;
@@ -53,7 +57,7 @@ public class CategoryService {
     public GenericResultClass getWithFilterSortPage(@RequestBody GenericRequestDataClass requestData) {
         try {
 
-            UserDetailsImpl currentUser = authenticationService.getCurrentUser();
+            UserDetailsImpl currentUser = authenticationService.getCurrentUserImpl();
             var result = genericGetDataWithFilterSortPgn.Apply(entityManager, requestData, Category.class);
 
             return result;
@@ -65,7 +69,7 @@ public class CategoryService {
     public GenericResultClass post(@RequestParam String name, @RequestParam int headerId, @RequestParam int subId, @RequestParam MultipartFile imageFile) {
         try {
 
-            UserDetailsImpl currentUser = authenticationService.getCurrentUser();
+            UserDetailsImpl currentUser = authenticationService.getCurrentUserImpl();
             Category category = new Category(name, headerId, subId, currentUser.getId());
 
 
@@ -95,6 +99,29 @@ public class CategoryService {
         } catch (Exception e) {
             return GenericResultClass.Exception(e, logger);
         }
+    }
+
+
+    public GenericResultClass AddCategoryToUsersFavoritCategories(long cateogryId) {
+        try {
+
+            Category category = categoryRepository.findById(cateogryId).orElseThrow();
+
+            String currentUserName = authenticationService.getUserName();
+            AppUser user = userRepository.findByUsername(currentUserName);
+            var currentCategoriesList = user.getCategories();
+            var isExist = currentCategoriesList.contains(category);
+            if (!isExist) {
+                currentCategoriesList.add(category);
+                user.setUserCategories(currentCategoriesList);
+                userRepository.save(user);
+                return GenericResultClass.Success(true, 1);
+            } else return GenericResultClass.UnSuccessful("Category already exists in users categories list...");
+
+        } catch (Exception ex) {
+            return GenericResultClass.Exception(ex, logger);
+        }
+
     }
 
 

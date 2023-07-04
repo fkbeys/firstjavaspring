@@ -121,7 +121,7 @@ public class AuthenticationService {
 
     }
 
-    public UserDetailsImpl getCurrentUser() {
+    public UserDetailsImpl getCurrentUserImpl() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication.getPrincipal() instanceof UserDetailsImpl)) {
@@ -129,5 +129,15 @@ public class AuthenticationService {
         }
         return (UserDetailsImpl) authentication.getPrincipal();
     }
+
+    public String getUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication.getPrincipal() instanceof UserDetailsImpl)) {
+            throw new IllegalStateException("Unknown user principal: " + authentication.getPrincipal());
+        }
+        return  ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+    }
+
 
 }
