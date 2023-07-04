@@ -1,8 +1,8 @@
 package com.kayaspring.kayaspring.api.controllers;
 
-import com.kayaspring.kayaspring.Business.Services.CategoryService;
-import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
-import com.kayaspring.kayaspring.Common.GenericResultClass;
+import com.kayaspring.kayaspring.business.services.CategoryService;
+import com.kayaspring.kayaspring.common.GenericRequestDataClass;
+import com.kayaspring.kayaspring.common.GenericResultClass;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

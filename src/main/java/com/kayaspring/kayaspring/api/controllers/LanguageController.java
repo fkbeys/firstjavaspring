@@ -1,9 +1,9 @@
 package com.kayaspring.kayaspring.api.controllers;
 
-import com.kayaspring.kayaspring.Business.Services.IService;
-import com.kayaspring.kayaspring.Business.Services.LanguageService;
-import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Entities.Models.Language;
+import com.kayaspring.kayaspring.business.services.IService;
+import com.kayaspring.kayaspring.business.services.LanguageService;
+import com.kayaspring.kayaspring.common.GenericResultClass;
+import com.kayaspring.kayaspring.entities.models.Language;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 

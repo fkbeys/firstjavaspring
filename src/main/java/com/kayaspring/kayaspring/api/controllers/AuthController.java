@@ -1,9 +1,9 @@
 package com.kayaspring.kayaspring.api.controllers;
 
-import com.kayaspring.kayaspring.Business.Services.AuthenticationService;
-import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Entities.Requests.LoginRequest;
-import com.kayaspring.kayaspring.Entities.Requests.SignupRequest;
+import com.kayaspring.kayaspring.business.services.AuthenticationService;
+import com.kayaspring.kayaspring.common.GenericResultClass;
+import com.kayaspring.kayaspring.entities.requests.LoginRequest;
+import com.kayaspring.kayaspring.entities.requests.SignupRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
