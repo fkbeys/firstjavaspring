@@ -3,7 +3,6 @@ package com.kayaspring.kayaspring.Auth;
 import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Business.Services.UserDetailsServiceImpl;
 import jakarta.servlet.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,16 +20,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private final UserDetailsServiceImpl userDetailsService;
+
+
+    private final AuthEntryPointJwt unauthorizedHandler;
 
 
     private final ILogger logger;
 
-    public WebSecurityConfig(ILogger logger, JwtUtils jwtUtils) {
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler, ILogger logger, JwtUtils jwtUtils) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
         this.logger = logger;
         this.jwtUtils = jwtUtils;
     }
