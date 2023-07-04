@@ -85,28 +85,31 @@ public class AuthenticationService {
 
         Set<UserRole> roles = new HashSet<>();
 
+        
+        String roleNotFoundErrorStr="Error: Role is not found.";
+        
         if (strRoles == null) {
             UserRole userRole = roleRepository.findByName(UserRoleEnums.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException(roleNotFoundErrorStr));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
                         UserRole adminRole = roleRepository.findByName(UserRoleEnums.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException(roleNotFoundErrorStr));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
                         UserRole modRole = roleRepository.findByName(UserRoleEnums.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException(roleNotFoundErrorStr));
                         roles.add(modRole);
 
                         break;
                     default:
                         UserRole userRole = roleRepository.findByName(UserRoleEnums.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException(roleNotFoundErrorStr));
                         roles.add(userRole);
                 }
             });
