@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.HealthCheck;
+package com.kayaspring.kayaspring.api.Middlewares.HealthCheck;
 
 import com.kayaspring.kayaspring.Data.Repositories.IUserRepository;
 import org.springframework.boot.actuate.health.Health;

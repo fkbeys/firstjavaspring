@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.Logging;
+package com.kayaspring.kayaspring.api.Middlewares.Logging;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Controllers;
+package com.kayaspring.kayaspring.api.controllers;
 
 import com.kayaspring.kayaspring.Business.Services.IService;
 import com.kayaspring.kayaspring.Business.Services.WordService;

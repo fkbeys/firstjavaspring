@@ -2,7 +2,7 @@ package com.kayaspring.kayaspring.Data.DynamicSortAndFilters;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import jakarta.persistence.EntityManager;

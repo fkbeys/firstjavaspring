@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Common;
 
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.api.Middlewares.Logging.ILogger;
 import jakarta.persistence.Transient;
 
 public class GenericResultClass {

@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Auth;
 
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Business.Services.UserDetailsServiceImpl;
 import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;

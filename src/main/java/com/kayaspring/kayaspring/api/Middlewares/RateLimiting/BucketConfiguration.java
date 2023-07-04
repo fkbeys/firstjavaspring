@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.RateLimiting;
+package com.kayaspring.kayaspring.api.Middlewares.RateLimiting;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;

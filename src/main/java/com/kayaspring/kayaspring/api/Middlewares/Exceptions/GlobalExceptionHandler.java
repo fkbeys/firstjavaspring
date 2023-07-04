@@ -1,7 +1,7 @@
-package com.kayaspring.kayaspring.Api.Middlewares.Exceptions;
+package com.kayaspring.kayaspring.api.Middlewares.Exceptions;
 
 import com.kayaspring.kayaspring.Common.GenericResultClass;
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.api.Middlewares.Logging.ILogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

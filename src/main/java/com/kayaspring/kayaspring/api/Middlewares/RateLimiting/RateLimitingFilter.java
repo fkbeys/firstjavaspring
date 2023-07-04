@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.RateLimiting;
+package com.kayaspring.kayaspring.api.Middlewares.RateLimiting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bucket4j.Bucket;

@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.RateLimiting;
+package com.kayaspring.kayaspring.api.Middlewares.RateLimiting;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

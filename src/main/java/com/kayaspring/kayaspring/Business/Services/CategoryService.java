@@ -1,6 +1,6 @@
 package com.kayaspring.kayaspring.Business.Services;
 
-import com.kayaspring.kayaspring.Api.Middlewares.Logging.ILogger;
+import com.kayaspring.kayaspring.api.Middlewares.Logging.ILogger;
 import com.kayaspring.kayaspring.Common.GenericRequestDataClass;
 import com.kayaspring.kayaspring.Common.GenericResultClass;
 import com.kayaspring.kayaspring.Data.DynamicSortAndFilters.IGenericGetDataWithFilterSortPgn;

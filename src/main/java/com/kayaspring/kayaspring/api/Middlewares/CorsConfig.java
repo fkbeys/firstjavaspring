@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares;
+package com.kayaspring.kayaspring.api.Middlewares;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

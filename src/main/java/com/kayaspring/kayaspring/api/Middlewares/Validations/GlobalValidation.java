@@ -1,4 +1,4 @@
-package com.kayaspring.kayaspring.Api.Middlewares.Validations;
+package com.kayaspring.kayaspring.api.Middlewares.Validations;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
