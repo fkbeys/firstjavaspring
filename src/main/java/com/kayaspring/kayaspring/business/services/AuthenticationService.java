@@ -81,7 +81,7 @@ public class AuthenticationService {
         AppUser user = new AppUser(signUpRequest.getUsername(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        List<String> strRoles = Arrays.asList(signUpRequest.role.split(","));
+        List<String> strRoles = Arrays.asList(signUpRequest.getRole().split(","));
 
         Set<UserRole> roles = new HashSet<>();
 

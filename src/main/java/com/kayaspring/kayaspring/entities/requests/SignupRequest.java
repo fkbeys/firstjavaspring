@@ -2,10 +2,18 @@ package com.kayaspring.kayaspring.entities.requests;
 
 public class SignupRequest {
 
-    public String username;
-    public String email;
-    public String password;
-    public String role;
+    private String username;
+    private String email;
+    private String password;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getUsername() {
         return username;
